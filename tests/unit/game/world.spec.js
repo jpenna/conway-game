@@ -138,6 +138,7 @@ describe('World', () => {
     });
   });
 
+
   describe('Interactions', () => {
     beforeEach(() => {
       world.cellSize = 2;
@@ -149,23 +150,23 @@ describe('World', () => {
 
     describe('On Hover', () => {
       it('Same cell: don\'t re-render', () => {
-        world.handleHover();
-        world.handleHover();
+        world.handleMouseMove({});
+        world.handleMouseMove({});
         sinon.assert.calledOnce(world.renderWorld);
       });
 
       it('Should update hovered vars', () => {
         getMousePositionStub.returns([700, 400]);
-        world.handleHover();
+        world.handleMouseMove({});
         expect(world.hoverCol).to.equal(350);
         expect(world.hoverRow).to.equal(200);
       });
 
       it('Should call re-render', () => {
-        world.handleHover();
+        world.handleMouseMove({});
         world.hoverRow = 20;
         world.hoverCol = 50;
-        world.handleHover();
+        world.handleMouseMove({});
         sinon.assert.calledTwice(world.renderWorld);
       });
     });
@@ -202,8 +203,71 @@ describe('World', () => {
         expect(world.initialWorld[world.hoverCol][world.hoverRow]).to.equal('player');
       });
 
+      it('Skip rendering if there was no model change', () => {
+        world.spawnMove = true;
+        const key = `${world.hoverCol},${world.hoverRow}`;
+        world.liveCells.set(key, 'set');
+        world.handleClick();
+        sinon.assert.notCalled(world.renderWorld);
+      });
+
+      it('Skip killing cell if it is move spawning', () => {
+        const key = `${world.hoverCol},${world.hoverRow}`;
+        expect(world.liveCells.has(key)).to.be.false;
+        world.spawnMove = true;
+        world.liveCells.set(key, 'set');
+        world.handleClick();
+        expect(world.liveCells.has(key)).to.be.true;
+      });
+
+      it('Skip spawning cell if it is move killing', () => {
+        const key = `${world.hoverCol},${world.hoverRow}`;
+        expect(world.liveCells.has(key)).to.be.false;
+        world.spawnMove = false;
+        world.handleClick();
+        expect(world.liveCells.has(key)).to.be.false;
+      });
+
       it('Re-render canvas', () => {
         world.handleClick();
+        sinon.assert.calledOnce(world.renderWorld);
+      });
+    });
+
+    describe('On moving', () => {
+      beforeEach(() => {
+        sinon.stub(world, 'handleClick');
+      });
+
+      it('Set spawnMove if mouse is down and it is the first action', () => {
+        expect(world.spawnMove).to.be.null;
+        world.handleMovingSelection({ buttons: 1 });
+        expect(world.spawnMove).to.be.true;
+      });
+
+      it('Unset spawnMove if the button is not clicked and is finishing spawning action', () => {
+        world.handleMovingSelection({ buttons: 1 });
+        expect(world.spawnMove).to.be.true;
+        world.handleMovingSelection({ buttons: 0 });
+        expect(world.spawnMove).to.be.null;
+      });
+
+      it('Unset spawnMove if the button is not clicked and is finishing killing action', () => {
+        const key = `${world.hoverCol},${world.hoverRow}`;
+        world.liveCells.set(key, 'set');
+        world.handleMovingSelection({ buttons: 1 });
+        expect(world.spawnMove).to.be.false;
+        world.handleMovingSelection({ buttons: 0 });
+        expect(world.spawnMove).to.be.null;
+      });
+
+      it('Handles click if mouse is down', () => {
+        world.handleMovingSelection({ buttons: 1 });
+        sinon.assert.calledOnce(world.handleClick);
+      });
+
+      it('Render world', () => {
+        world.handleMovingSelection({});
         sinon.assert.calledOnce(world.renderWorld);
       });
     });

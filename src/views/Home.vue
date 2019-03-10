@@ -48,5 +48,6 @@ export default {
   margin: 2rem auto;
   max-width: 800px;
   text-align: center;
+  cursor: pointer;
 }
 </style>

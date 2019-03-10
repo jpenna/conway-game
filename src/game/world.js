@@ -18,6 +18,8 @@ export default class World {
     this.hoverCol = null;
     this.hoverRow = null;
 
+    this.spawnMove = null;
+
     window.addEventListener('resize', this.resizeCanvas);
   }
 
@@ -38,8 +40,8 @@ export default class World {
     this.canvas = document.getElementById('world');
     this.context = this.canvas.getContext('2d');
 
-    this.canvas.addEventListener('click', this.handleClick.bind(this));
-    this.canvas.addEventListener('mousemove', this.handleHover.bind(this));
+    this.canvas.addEventListener('mousedown', this.handleClick.bind(this));
+    this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
     // this.canvas.addEventListener('mouseout', this.handleMouseOut.bind(this));
 
     this.resizeCanvas();
@@ -121,7 +123,17 @@ export default class World {
   }
 
   // --------------- Interaction ---------------
-  handleHover(event) {
+  handleMovingSelection(event) {
+    if (event.buttons === 1 && this.spawnMove === null) {
+      const key = `${this.hoverCol},${this.hoverRow}`;
+      this.spawnMove = !this.liveCells.has(key);
+    } else if (this.spawnMove !== null && event.buttons === 0) this.spawnMove = null;
+
+    if (event.buttons === 1) return this.handleClick();
+    this.renderWorld();
+  }
+
+  handleMouseMove(event) {
     const [mouseX, mouseY] = helpers.getMousePosition(event, this.canvasWidth, this.canvasHeight);
 
     const posX = Math.floor(mouseX / this.cellSize);
@@ -132,19 +144,24 @@ export default class World {
     this.hoverCol = posX;
     this.hoverRow = posY;
 
-    this.renderWorld();
+    this.handleMovingSelection(event);
   }
 
   handleClick() {
     const key = `${this.hoverCol},${this.hoverRow}`;
+
     if (this.liveCells.has(key) && this.initialWorld[this.hoverCol][this.hoverRow] !== 'me') return;
-    if (this.liveCells.has(key)) {
+
+    // Remove if has cell and is not move spawning
+    if (this.liveCells.has(key) && this.spawnMove !== true) {
       this.liveCells.delete(key);
       this.initialWorld[this.hoverCol][this.hoverRow] = null;
-    } else {
+      this.renderWorld();
+    // Add if is not move killing
+    } else if (this.spawnMove !== false) {
       this.liveCells.set(key, [this.hoverCol, this.hoverRow]);
       this.initialWorld[this.hoverCol][this.hoverRow] = 'me';
+      this.renderWorld();
     }
-    this.renderWorld();
   }
 }
