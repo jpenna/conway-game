@@ -38,10 +38,11 @@
         <el-popover trigger="hover">
           <el-button
             slot="reference"
-            :type="true ? 'warning' : 'success'"
+            :type="isRunning ? 'danger' : 'success'"
             plain
+            @click="handleRunning"
           >
-            Start
+            {{ isRunning ? 'Stop' : 'Start' }}
           </el-button>
           <div>
             <div
@@ -75,6 +76,7 @@ export default {
 
   props: {
     world: { type: Object, required: true },
+    isRunning: { type: Boolean, required: true },
   },
 
   data() {
@@ -99,6 +101,10 @@ export default {
       this.world.setColor(color);
 
       this.$emit('colorChange', color);
+    },
+
+    handleRunning() {
+      this.$emit('toggleRunning');
     },
   },
 };

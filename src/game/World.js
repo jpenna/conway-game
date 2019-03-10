@@ -4,13 +4,13 @@ import Color from 'color';
 import helpers from './helpers';
 
 export default class World {
-  constructor(rowNumber, colNumber) {
+  constructor(rowNumber, colNumber, tick = 500) {
     this.rowNumber = rowNumber;
     this.colNumber = colNumber;
+    this.tick = tick;
 
     this.initialWorld = [];
     this.currentWorld = [];
-    this.nextWorld = [];
 
     this.playersColors = {};
     this.liveCells = new Map();
@@ -28,12 +28,29 @@ export default class World {
     window.removeEventListener('resize', this.resizeCanvas);
   }
 
+  // --------------- Properties ---------------
   setColor(color) {
     this.playersColors.me = color;
     this.hoverColor = Color(color).lighten(0.5).hex();
     this.renderWorld();
   }
 
+  // --------------- Run ---------------
+  start() {
+    this.running = true;
+    helpers.runRound(this.liveCells);
+    this.renderWorld();
+    this.startTimeout = setTimeout(() => {
+      this.start();
+    }, this.tick);
+  }
+
+  stop() {
+    this.running = false;
+    clearTimeout(this.startTimeout);
+  }
+
+  // --------------- Initial ---------------
   // Initialize world and model
   create() {
     this.worldContainer = document.getElementById('worldContainer');
@@ -49,7 +66,6 @@ export default class World {
     for (let col = 0; col <= this.colNumber; col++) {
       this.initialWorld.push([]);
       this.currentWorld.push([]);
-      this.nextWorld.push([]);
     }
 
     this.renderWorld();
@@ -117,7 +133,7 @@ export default class World {
       this.context.beginPath();
       const posX = cell[0] * this.cellSize;
       const posY = cell[1] * this.cellSize;
-      this.context.fillStyle = this.playersColors[this.initialWorld[cell[0]][cell[1]]];
+      this.context.fillStyle = this.playersColors[this.initialWorld[cell[0]][cell[1]]] || 'blue';
       this.context.fillRect(posX, posY, this.cellSize, this.cellSize);
     }
   }
