@@ -103,6 +103,10 @@ $width: 25 50 75 100;
   max-width: 100% !important;
 }
 
+.align-middle {
+  vertical-align: middle;
+}
+
 // 2 columns with space-between
 .flex-split {
   display: flex;

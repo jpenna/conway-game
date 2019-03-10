@@ -7,7 +7,16 @@
         <div>Duration</div>
 
         <!-- Color -->
-        <div>Color</div>
+        <div class="mt-10">
+          <span class="d-inline-block mr-10">Your color:</span>
+          <el-color-picker
+            value="color"
+            size="mini"
+            class="align-middle"
+            :predefine="predefinedColors"
+            @active-change="handleColorChange"
+          />
+        </div>
       </div>
 
       <!-- Right -->
@@ -22,5 +31,27 @@
 <script>
 export default {
   name: 'RoomHeader',
+
+  data() {
+    return {
+      color: '#ff4500',
+      predefinedColors: [
+        '#ff4500',
+        '#ff8c00',
+        '#ffd700',
+        '#90ee90',
+        '#00ced1',
+        '#1e90ff',
+        '#c71585',
+      ],
+    };
+  },
+
+  methods: {
+    // Change color on picker's color change
+    handleColorChange(color) {
+      this.color = color;
+    },
+  },
 };
 </script>
