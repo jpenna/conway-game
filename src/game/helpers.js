@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-
+import Color from 'color';
 // --------------- Utils ---------------
 function getMousePosition(event, maxWidth, maxHeight) {
   const { offsetX, offsetY } = event;
@@ -11,7 +11,7 @@ function getMousePosition(event, maxWidth, maxHeight) {
 }
 
 // --------------- Game ---------------
-function checkSurvivals(liveCells, deadCells, killCells, posX, posY) {
+function checkSurvivals(liveCells, deadCells, killCells, playersColors, posX, posY, color) {
   let countNeighbors = 0;
   for (let i = -1; i < 2; i++) {
     const neighborX = posX + i;
@@ -19,8 +19,14 @@ function checkSurvivals(liveCells, deadCells, killCells, posX, posY) {
       if (!j && !i) continue; // eslint-disable-line no-continue
       const neighborY = posY + j;
       const key = `${neighborX},${neighborY}`;
+      // Count live neighbors
       if (liveCells.has(key)) countNeighbors += 1;
-      else deadCells.set(key, (deadCells.get(key) || 0) + 1);
+      // If not alive, add neighbor to list of dead cells
+      else {
+        const [,, count = 0, colorsArray = []] = deadCells.get(key) || [];
+        colorsArray.push(playersColors[color] || color);
+        deadCells.set(key, [neighborX, neighborY, count + 1, colorsArray]);
+      }
     }
   }
 
@@ -28,17 +34,26 @@ function checkSurvivals(liveCells, deadCells, killCells, posX, posY) {
   if (countNeighbors < 2 || countNeighbors > 3) killCells.add(`${posX},${posY}`);
 }
 
-function runRound(liveCells) {
+function runRound(liveCells, playersColors) {
   const deadCells = new Map();
   const killCells = new Set();
   for (const [, cell] of liveCells) {
-    checkSurvivals(liveCells, deadCells, killCells, cell[0], cell[1]);
+    checkSurvivals(liveCells, deadCells, killCells, playersColors, cell[0], cell[1], cell[2]);
   }
 
   // Check which dead cells should be alive
-  for (const [key, count] of deadCells) {
-    const [x, y] = key.split(',');
-    if (count === 3 && x >= 0 && y >= 0) liveCells.set(key, [+x, +y]);
+  for (const [key, info] of deadCells) {
+    const [x, y, count, colorsArray] = info;
+    if (count === 3 && x >= 0 && y >= 0) {
+      // Mix colors of the neighbor cells (the saviors)
+      const mixColor = colorsArray
+        .reduce((acc, color, index) => {
+          if (!index) return Color(color);
+          return acc.mix(Color(color));
+        }, '')
+        .hex();
+      liveCells.set(key, [+x, +y, mixColor]);
+    }
   }
 
   // Kill cells which didn't survive

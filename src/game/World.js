@@ -35,7 +35,7 @@ export default class World {
   // --------------- Run ---------------
   start() {
     this.running = true;
-    helpers.runRound(this.liveCells);
+    helpers.runRound(this.liveCells, this.playersColors);
     this.renderWorld();
     this.startTimeout = setTimeout(() => {
       this.start();
