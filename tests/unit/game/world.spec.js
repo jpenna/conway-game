@@ -6,13 +6,15 @@ import helpers from '@/game/helpers';
 const getMousePositionStub = sinon.stub(helpers, 'getMousePosition').returns([100, 300]);
 
 describe('World', () => {
-  const worldSide = 50;
+  const worldSize = 50;
+  const userColor = 'blue';
   let world;
 
   beforeEach(() => {
-    world = new World(worldSide, worldSide);
+    world = new World(worldSize, worldSize);
     world.worldContainer = { offsetWidth: 100 };
     world.canvas = {};
+    world.playersColors.me = userColor;
   });
 
   afterEach(() => {
@@ -70,7 +72,7 @@ describe('World', () => {
     it('Draws the correct amount of columns and row lines', () => {
       world.drawLine = sinon.fake();
       world.renderWorld();
-      expect(world.drawLine.callCount).to.equal(worldSide + worldSide);
+      expect(world.drawLine.callCount).to.equal(worldSize + worldSize);
     });
 
     it('Draws a row line correctly', () => {
@@ -100,35 +102,110 @@ describe('World', () => {
       world.hoverCell();
       sinon.assert.calledWith(world.context.strokeRect, posX, posY, world.cellSize, world.cellSize);
     });
+
+    describe('Render live cells', () => {
+      beforeEach(() => {
+        world.cellSize = 2;
+        world.hoverRow = 10;
+        world.hoverCol = 5;
+        world.renderWorld = sinon.fake();
+        world.context = {
+          ...world.context,
+          fillRect: sinon.fake(),
+        };
+        world.initialWorld = new Array(worldSize).fill([]);
+        world.initialWorld[world.hoverCol][world.hoverRow] = 'me';
+        const key = `${world.hoverCol},${world.hoverRow}`;
+        world.liveCells.set(key, [world.hoverCol, world.hoverRow]);
+      });
+
+      it('Should set the right color', () => {
+        world.renderLiveCells();
+        expect(world.context.fillStyle).to.equal(userColor);
+      });
+
+      it('Should draw rectangle correctly', () => {
+        world.renderLiveCells();
+        sinon.assert.calledWith(
+          world.context.fillRect,
+          world.hoverCol * world.cellSize,
+          world.hoverRow * world.cellSize,
+          world.cellSize,
+          world.cellSize,
+        );
+        expect(world.context.fillStyle).to.equal(userColor);
+      });
+    });
   });
 
   describe('Interactions', () => {
     beforeEach(() => {
       world.cellSize = 2;
-      world.hoverCol = 5;
       world.hoverRow = 10;
+      world.hoverCol = 5;
       world.renderWorld = sinon.fake();
+      world.initialWorld = new Array(worldSize).fill([]);
     });
 
-    it('On hover: same cell: don\'t re-render', () => {
-      world.handleHover();
-      world.handleHover();
-      sinon.assert.calledOnce(world.renderWorld);
+    describe('On Hover', () => {
+      it('Same cell: don\'t re-render', () => {
+        world.handleHover();
+        world.handleHover();
+        sinon.assert.calledOnce(world.renderWorld);
+      });
+
+      it('Should update hovered vars', () => {
+        getMousePositionStub.returns([700, 400]);
+        world.handleHover();
+        expect(world.hoverCol).to.equal(350);
+        expect(world.hoverRow).to.equal(200);
+      });
+
+      it('Should call re-render', () => {
+        world.handleHover();
+        world.hoverRow = 20;
+        world.hoverCol = 50;
+        world.handleHover();
+        sinon.assert.calledTwice(world.renderWorld);
+      });
     });
 
-    it('On hover: should update hovered vars', () => {
-      getMousePositionStub.returns([700, 400]);
-      world.handleHover();
-      expect(world.hoverCol).to.equal(350);
-      expect(world.hoverRow).to.equal(200);
-    });
+    describe('On Click', () => {
+      it('Add `me` cell to Initial World if not alive', () => {
+        world.handleClick();
+        expect(world.initialWorld[world.hoverCol][world.hoverRow]).to.equal('me');
+      });
 
-    it('On hover: should call re-render', () => {
-      world.handleHover();
-      world.hoverCol = 50;
-      world.hoverRow = 20;
-      world.handleHover();
-      sinon.assert.calledTwice(world.renderWorld);
+      it('Set position of `me` live cell in liveCells map', () => {
+        world.handleClick();
+        expect(world.liveCells.has(`${world.hoverCol},${world.hoverRow}`)).to.be.true;
+      });
+
+      it('Remove `me` cell from Initial World if alive', () => {
+        world.handleClick();
+        world.handleClick();
+        expect(world.initialWorld[world.hoverCol][world.hoverRow]).to.equal(null);
+      });
+
+      it('Remove `me` cell from liveCells map', () => {
+        world.handleClick();
+        world.handleClick();
+        expect(world.liveCells.has(`${world.hoverCol},${world.hoverRow}`)).to.be.false;
+      });
+
+      it('Don\'t do anything if cell is occupied by another player', () => {
+        world.initialWorld[world.hoverCol][world.hoverRow] = 'player';
+        const key = `${world.hoverCol},${world.hoverRow}`;
+        world.liveCells.set(key, 'set');
+        world.handleClick();
+        expect(world.liveCells.size).to.equal(1);
+        expect(world.initialWorld[world.hoverCol][world.hoverRow]).to.equal('player');
+      });
+
+      it('Re-render canvas', () => {
+        world.handleClick();
+        sinon.assert.calledOnce(world.renderWorld);
+      });
     });
   });
 });

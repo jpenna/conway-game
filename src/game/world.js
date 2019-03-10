@@ -7,7 +7,13 @@ export default class World {
   constructor(rowNumber, colNumber) {
     this.rowNumber = rowNumber;
     this.colNumber = colNumber;
-    this.worldModel = [];
+
+    this.initialWorld = [];
+    this.currentWorld = [];
+    this.nextWorld = [];
+
+    this.playersColors = {};
+    this.liveCells = new Map();
 
     this.hoverCol = null;
     this.hoverRow = null;
@@ -21,8 +27,9 @@ export default class World {
   }
 
   setColor(color) {
-    this.color = color;
+    this.playersColors.me = color;
     this.hoverColor = Color(color).lighten(0.5).hex();
+    this.renderWorld();
   }
 
   // Initialize world and model
@@ -31,14 +38,16 @@ export default class World {
     this.canvas = document.getElementById('world');
     this.context = this.canvas.getContext('2d');
 
-    // this.canvas.addEventListener('click', this.handleClick.bind(this));
+    this.canvas.addEventListener('click', this.handleClick.bind(this));
     this.canvas.addEventListener('mousemove', this.handleHover.bind(this));
     // this.canvas.addEventListener('mouseout', this.handleMouseOut.bind(this));
 
     this.resizeCanvas();
 
-    for (let row = 0; row <= this.rowNumber; row++) {
-      this.worldModel.push([]);
+    for (let col = 0; col <= this.colNumber; col++) {
+      this.initialWorld.push([]);
+      this.currentWorld.push([]);
+      this.nextWorld.push([]);
     }
 
     this.renderWorld();
@@ -68,6 +77,7 @@ export default class World {
     }
 
     this.hoverCell();
+    this.renderLiveCells();
   }
 
   // --------------- Drawings ---------------
@@ -89,6 +99,7 @@ export default class World {
     this.context.stroke();
   }
 
+  // Draw border for hovered cell
   hoverCell() {
     if (this.hoverCol === null && this.hoverRow === null) return;
     this.context.beginPath();
@@ -96,6 +107,17 @@ export default class World {
     const posY = this.hoverRow * this.cellSize;
     this.context.strokeStyle = this.hoverColor;
     this.context.strokeRect(posX, posY, this.cellSize, this.cellSize);
+  }
+
+  // Fill cell with color
+  renderLiveCells() {
+    for (const [, cell] of this.liveCells) {
+      this.context.beginPath();
+      const posX = cell[0] * this.cellSize;
+      const posY = cell[1] * this.cellSize;
+      this.context.fillStyle = this.playersColors[this.initialWorld[cell[0]][cell[1]]];
+      this.context.fillRect(posX, posY, this.cellSize, this.cellSize);
+    }
   }
 
   // --------------- Interaction ---------------
@@ -110,7 +132,19 @@ export default class World {
     this.hoverCol = posX;
     this.hoverRow = posY;
 
-    // console.log(this.worldModel);
+    this.renderWorld();
+  }
+
+  handleClick() {
+    const key = `${this.hoverCol},${this.hoverRow}`;
+    if (this.liveCells.has(key) && this.initialWorld[this.hoverCol][this.hoverRow] !== 'me') return;
+    if (this.liveCells.has(key)) {
+      this.liveCells.delete(key);
+      this.initialWorld[this.hoverCol][this.hoverRow] = null;
+    } else {
+      this.liveCells.set(key, [this.hoverCol, this.hoverRow]);
+      this.initialWorld[this.hoverCol][this.hoverRow] = 'me';
+    }
     this.renderWorld();
   }
 }
