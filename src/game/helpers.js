@@ -18,11 +18,8 @@ function checkSurvivals(liveCells, deadCells, killCells, posX, posY) {
     for (let j = -1; j < 2; j++) {
       if (!j && !i) continue; // eslint-disable-line no-continue
       const neighborY = posY + j;
-      if (posX === 1 && posY === 2) console.log(neighborX, neighborY, 'count:', countNeighbors)
-
       const key = `${neighborX},${neighborY}`;
       if (liveCells.has(key)) countNeighbors += 1;
-      if (posX === 1 && posY === 2) console.log('count:', countNeighbors)
       else deadCells.set(key, (deadCells.get(key) || 0) + 1);
     }
   }
@@ -38,15 +35,16 @@ function runRound(liveCells) {
     checkSurvivals(liveCells, deadCells, killCells, cell[0], cell[1]);
   }
 
+  // Check which dead cells should be alive
   for (const [key, count] of deadCells) {
-    const coords = key.split(',');
-    if (count === 3) liveCells.set(key, coords);
+    const [x, y] = key.split(',');
+    if (count === 3 && x >= 0 && y >= 0) liveCells.set(key, [+x, +y]);
   }
 
+  // Kill cells which didn't survive
   for (const cell of killCells) {
     liveCells.delete(cell);
   }
-  console.log(liveCells)
 }
 
 // TODO Find out how to stub when doing `export function...` and `import * as helpers`

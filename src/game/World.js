@@ -9,9 +9,6 @@ export default class World {
     this.colNumber = colNumber;
     this.tick = tick;
 
-    this.initialWorld = [];
-    this.currentWorld = [];
-
     this.playersColors = {};
     this.liveCells = new Map();
 
@@ -62,11 +59,6 @@ export default class World {
     // this.canvas.addEventListener('mouseout', this.handleMouseOut.bind(this));
 
     this.resizeCanvas();
-
-    for (let col = 0; col <= this.colNumber; col++) {
-      this.initialWorld.push([]);
-      this.currentWorld.push([]);
-    }
 
     this.renderWorld();
   }
@@ -133,7 +125,7 @@ export default class World {
       this.context.beginPath();
       const posX = cell[0] * this.cellSize;
       const posY = cell[1] * this.cellSize;
-      this.context.fillStyle = this.playersColors[this.initialWorld[cell[0]][cell[1]]] || 'blue';
+      this.context.fillStyle = this.playersColors[cell[2]] || cell[2] || 'blue';
       this.context.fillRect(posX, posY, this.cellSize, this.cellSize);
     }
   }
@@ -166,17 +158,15 @@ export default class World {
   handleClick() {
     const key = `${this.hoverCol},${this.hoverRow}`;
 
-    if (this.liveCells.has(key) && this.initialWorld[this.hoverCol][this.hoverRow] !== 'me') return;
+    if (this.liveCells.has(key) && this.liveCells.get(key)[2] === 'me') return;
 
     // Remove if has cell and is not move spawning
     if (this.liveCells.has(key) && this.spawnMove !== true) {
       this.liveCells.delete(key);
-      this.initialWorld[this.hoverCol][this.hoverRow] = null;
       this.renderWorld();
     // Add if is not move killing
     } else if (this.spawnMove !== false) {
-      this.liveCells.set(key, [this.hoverCol, this.hoverRow]);
-      this.initialWorld[this.hoverCol][this.hoverRow] = 'me';
+      this.liveCells.set(key, [this.hoverCol, this.hoverRow, 'me']);
       this.renderWorld();
     }
   }
