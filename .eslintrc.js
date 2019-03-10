@@ -41,5 +41,6 @@ module.exports = {
     'consistent-return': 0,
     'arrow-body-style': 'warn',
     'no-restricted-syntax': 0,
+    'no-plusplus': 0,
   },
 };

@@ -28,3 +28,7 @@ $color-disabled-lighter: $--color-text-secondary;
 $color-link: #409EFF;
 
 @import '~element-ui/packages/theme-chalk/src/mixins/mixins.scss';
+
+:export {
+  worldBorderColor: $--border-color-lighter;
+}
