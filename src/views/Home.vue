@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <RoomHeader />
+    <RoomHeader @colorChange="handleColorChange" />
 
     <div id="worldContainer" class="canvas-container">
       <canvas id="world" />
@@ -22,10 +22,17 @@ export default {
   mounted() {
     this.world = new World(50, 50);
     this.world.create();
+    this.world.setColor('blue');
   },
 
   destroyed() {
     this.world.destruct();
+  },
+
+  methods: {
+    handleColorChange(color) {
+      this.world.setColor(color);
+    },
   },
 };
 </script>

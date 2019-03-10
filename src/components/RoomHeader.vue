@@ -86,6 +86,7 @@ export default {
     // Change color on picker's color change
     handleColorChange(color) {
       this.color = color;
+      this.$emit('colorChange', color);
     },
   },
 };

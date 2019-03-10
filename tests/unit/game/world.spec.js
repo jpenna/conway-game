@@ -48,12 +48,19 @@ describe('World', () => {
         moveTo: sinon.fake(),
         lineTo: sinon.fake(),
         stroke: () => {},
+        clearRect: sinon.fake(),
+
       };
+    });
+
+    it('Clears canvas before rendering', () => {
+      world.renderWorld();
+      sinon.assert.calledWith(world.context.clearRect, 0, 0, world.canvasWidth, world.canvasHeight);
     });
 
     it('Draws the correct amount of columns and row lines', () => {
       world.drawLine = sinon.fake();
-      world.drawCellDelimiters();
+      world.renderWorld();
       expect(world.drawLine.callCount).to.equal(worldSide + worldSide);
     });
 
