@@ -1,0 +1,112 @@
+@import './_variables';
+
+$spaceamounts: (0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 75, 100); // Adjust this to include the pixel amounts you need.
+$sides: (top, bottom, left, right); // Leave this variable alone
+
+@each $space in $spaceamounts {
+  @each $side in $sides {
+    .m#{str-slice($side, 0, 1)}-#{$space} {
+      margin-#{$side}: #{$space}px !important;
+    }
+
+    .p#{str-slice($side, 0, 1)}-#{$space} {
+      padding-#{$side}: #{$space}px !important;
+    }
+  }
+}
+
+$display: flex block inline-block inline table table-cell none;
+@each $d in $display {
+  .d-#{$d} {
+    display: #{$d} !important;
+  }
+}
+
+$laterals: right left center;
+@each $l in $laterals {
+  .f#{str-slice($l, 0, 1)} {
+    float: #{$l};
+  }
+
+  .text-#{$l} {
+    text-align: $l;
+  }
+}
+
+// 50 = 0.5rem, 140 = 1.4rem
+$sizes: 50 60 70 80 90 100 110 120 130 140 150;
+@each $s in $sizes {
+  .fs-#{$s} {
+    font-size: #{$s / 100}rem;
+  }
+}
+
+$angle: 90 180 270;
+@each $a in $angle {
+  .rotate-#{$a} {
+    transform: rotate(#{$a}deg);
+  }
+}
+
+$color-classes: (
+  text: color,
+  bg: background-color,
+);
+@each $name, $class in $color-classes {
+  // Regular
+  .#{$name}-success { #{$class}: $color-success !important; };
+  .#{$name}-danger { #{$class}: $color-danger !important; };
+  .#{$name}-primary { #{$class}: $color-primary !important; };
+  .#{$name}-warning { #{$class}: $color-warning !important; };
+  .#{$name}-disabled { #{$class}: $color-disabled !important; };
+  .#{$name}-disabled-lighter { #{$class}: $color-disabled-lighter !important; };
+}
+
+$width: 25 50 75 100;
+@each $w in $width {
+  .w-#{$w} {
+    width: #{$w}% !important;
+  }
+}
+
+.flex {
+  &-grow {
+    flex-grow: 1;
+  }
+
+  &-align {
+    align-items: center;
+  }
+
+  &-wrap {
+    flex-wrap: wrap;
+  }
+}
+
+/* Visible or not */
+.visible {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity .5s;
+}
+.invisible {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .5s, visibility .5s .5s;
+}
+
+.height-auto {
+  height: auto !important;
+}
+
+.mw-100 {
+  max-width: 100% !important;
+}
+
+// 2 columns with space-between
+.flex-split {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}

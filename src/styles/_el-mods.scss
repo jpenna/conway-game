@@ -1,0 +1,47 @@
+/* Modification to element-ui style classes */
+@import './variables';
+
+/* Add margin between icon and button's text */
+.el-button,
+small {
+  i:not(:only-child) {
+    &:first-child {
+      padding-right: 5px;
+    }
+
+    &:last-child {
+      padding-left: 5px;
+    }
+  }
+}
+
+/* v-loading inside input is smaller */
+.el-input,
+.el-select-dropdown,
+.el-radio-group {
+  .el-loading-mask,
+  + .el-loading-mask {
+    .el-loading-spinner {
+      text-align: left;
+    }
+
+    .circular {
+       height: 22px;
+       width: 22px;
+       margin-top: 11px;
+       background: white;
+     }
+
+    // For radio group, put back first radio element left border
+    + .el-radio-button {
+      .el-radio-button__inner {
+        border-left: 1px solid #dcdfe6;
+        border-radius: 4px 0 0 4px;
+        box-shadow: none;
+      }
+      &:not(.is-active) {
+        border-radius: 4px 0 0 4px;
+      }
+    }
+  }
+}
