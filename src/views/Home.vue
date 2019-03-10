@@ -10,7 +10,7 @@
 
 <script>
 import RoomHeader from '@/components/RoomHeader.vue';
-import World from '@/game/world';
+import World from '@/game/World';
 
 export default {
   name: 'Home',
@@ -21,6 +21,7 @@ export default {
 
   mounted() {
     this.world = new World(50, 50);
+    this.world.create();
   },
 
   destroyed() {

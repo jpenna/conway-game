@@ -6,23 +6,27 @@ export default class World {
     this.colNumber = colNumber;
     this.worldModel = [];
 
-    this.worldContainer = document.getElementById('worldContainer');
-    this.canvas = document.getElementById('world');
-    this.context = this.canvas.getContext('2d');
-
-    for (let row = 0; row <= this.rowNumber; row++) {
-      this.worldModel.push([]);
-    }
-
-    this.resizeCanvas();
-    this.initWorld();
-
     window.addEventListener('resize', this.resizeCanvas);
   }
 
   // Cleanup class listener
   destruct() {
     window.removeEventListener('resize', this.resizeCanvas);
+  }
+
+  // Initialize world and model
+  create() {
+    this.worldContainer = document.getElementById('worldContainer');
+    this.canvas = document.getElementById('world');
+    this.context = this.canvas.getContext('2d');
+
+    this.resizeCanvas();
+
+    for (let row = 0; row <= this.rowNumber; row++) {
+      this.worldModel.push([]);
+    }
+
+    this.drawCellDelimiters();
   }
 
   // Resize canvas on window resize
@@ -37,17 +41,18 @@ export default class World {
     this.cellSize = this.canvasWidth / this.colNumber;
   }
 
-  // Initialize grid and world model
-  initWorld() {
+  // Draw cell horizontal and vertical borders
+  drawCellDelimiters() {
     for (let row = 0; row < this.rowNumber; row++) {
-      this.drawCellDelimiter({ num: row, isRow: true });
-      for (let col = 0; col < this.colNumber; col++) {
-        this.drawCellDelimiter({ num: col, isRow: false });
-      }
+      this.drawLine({ num: row, isRow: true });
+    }
+    for (let col = 0; col < this.colNumber; col++) {
+      this.drawLine({ num: col, isRow: false });
     }
   }
 
-  drawCellDelimiter({ num, isRow }) {
+  // Draw line
+  drawLine({ num, isRow }) {
     if (!num) return;
     const pos = this.cellSize * num;
 
