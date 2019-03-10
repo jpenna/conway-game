@@ -21,29 +21,64 @@
 
       <!-- Right -->
       <div>
-        <el-button type="primary" plain>Patterns</el-button>
-        <el-button type="success" plain>Start</el-button>
+        <!-- Patterns -->
+        <el-dropdown>
+          <el-button type="primary" plain>
+            Patterns
+            <i class="el-icon-arrow-down el-icon--right" />
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>Pattern spdfoijaweopifjw 1</el-dropdown-item>
+            <el-dropdown-item>Pattern 2</el-dropdown-item>
+            <el-dropdown-item>Pattern 3</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+
+        <!-- Start/Stop -->
+        <el-popover trigger="hover">
+          <el-button
+            slot="reference"
+            :type="true ? 'warning' : 'success'"
+            plain
+          >
+            Start
+          </el-button>
+          <div>
+            <div
+              v-for="(player, index) in players"
+              :key="player.id"
+              class="flex-split mb-10"
+            >
+              <div>
+                <span class="mr-10 players-avatar" :style="{ backgroundColor: player.color }" />
+                <span>Player {{ index + 1 }}</span>
+              </div>
+              <el-tag
+                size="mini"
+                :type="player.labelType"
+              >
+                {{ player.status }}
+              </el-tag>
+            </div>
+          </div>
+        </el-popover>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import * as models from './models';
+
 export default {
   name: 'RoomHeader',
 
   data() {
     return {
       color: '#ff4500',
-      predefinedColors: [
-        '#ff4500',
-        '#ff8c00',
-        '#ffd700',
-        '#90ee90',
-        '#00ced1',
-        '#1e90ff',
-        '#c71585',
-      ],
+      predefinedColors: models.predefinedColors,
+
+      players: models.players,
     };
   },
 
@@ -55,3 +90,15 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import '@/styles/_variables.scss';
+
+.players-avatar {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: solid 1px $color-disabled-lighter;
+  border-radius: 50%;
+}
+</style>
