@@ -1,6 +1,9 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import World from '@/game/World';
+import helpers from '@/game/helpers';
+
+const getMousePositionStub = sinon.stub(helpers, 'getMousePosition').returns([100, 300]);
 
 describe('World', () => {
   const worldSide = 50;
@@ -12,10 +15,16 @@ describe('World', () => {
     world.canvas = {};
   });
 
+  afterEach(() => {
+    getMousePositionStub.resetHistory();
+  });
+
   describe('Constructor', () => {
-    it('Add `resize` event listener');
+    it('Add `resize` event listener correctly');
 
     it('On destruction, remove `resize` event listener');
+
+    it('Add `mouse hover` event listener correctly');
   });
 
   describe('Initialization', () => {
@@ -38,7 +47,7 @@ describe('World', () => {
     });
   });
 
-  describe('Delimiters', () => {
+  describe('Renderer', () => {
     beforeEach(() => {
       world.cellSize = 2;
       world.canvasWidth = 30;
@@ -49,7 +58,7 @@ describe('World', () => {
         lineTo: sinon.fake(),
         stroke: () => {},
         clearRect: sinon.fake(),
-
+        strokeRect: sinon.fake(),
       };
     });
 
@@ -76,6 +85,50 @@ describe('World', () => {
       world.drawLine({ num, isRow: false });
       sinon.assert.calledWith(world.context.moveTo, num * world.cellSize, 0);
       sinon.assert.calledWith(world.context.lineTo, num * world.cellSize, world.canvasHeight);
+    });
+
+    it('On hover: skip if nothing hovered', () => {
+      world.hoverCell();
+      sinon.assert.notCalled(world.context.strokeRect);
+    });
+
+    it('On hover: render border over the right cell', () => {
+      world.hoverCol = 5;
+      world.hoverRow = 10;
+      const posX = world.hoverCol * world.cellSize;
+      const posY = world.hoverRow * world.cellSize;
+      world.hoverCell();
+      sinon.assert.calledWith(world.context.strokeRect, posX, posY, world.cellSize, world.cellSize);
+    });
+  });
+
+  describe('Interactions', () => {
+    beforeEach(() => {
+      world.cellSize = 2;
+      world.hoverCol = 5;
+      world.hoverRow = 10;
+      world.renderWorld = sinon.fake();
+    });
+
+    it('On hover: same cell: don\'t re-render', () => {
+      world.handleHover();
+      world.handleHover();
+      sinon.assert.calledOnce(world.renderWorld);
+    });
+
+    it('On hover: should update hovered vars', () => {
+      getMousePositionStub.returns([700, 400]);
+      world.handleHover();
+      expect(world.hoverCol).to.equal(350);
+      expect(world.hoverRow).to.equal(200);
+    });
+
+    it('On hover: should call re-render', () => {
+      world.handleHover();
+      world.hoverCol = 50;
+      world.hoverRow = 20;
+      world.handleHover();
+      sinon.assert.calledTwice(world.renderWorld);
     });
   });
 });

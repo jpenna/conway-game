@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 
-export function getMousePosition(event, maxWidth, maxHeight) {
+function getMousePosition(event, maxWidth, maxHeight) {
   const { offsetX, offsetY } = event;
 
   const mouseX = offsetX <= 0 ? 0 : (offsetX >= maxWidth ? (maxWidth - 1) : offsetX);
@@ -8,3 +8,8 @@ export function getMousePosition(event, maxWidth, maxHeight) {
 
   return [mouseX, mouseY];
 }
+
+// TODO Find out how to stub when doing `export function...` and `import * as helpers`
+export default {
+  getMousePosition,
+};

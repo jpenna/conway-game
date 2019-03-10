@@ -1,7 +1,7 @@
 import styleVars from '@/styles/_variables.scss';
 import Color from 'color';
 
-import * as helpers from './helpers';
+import helpers from './helpers';
 
 export default class World {
   constructor(rowNumber, colNumber) {
