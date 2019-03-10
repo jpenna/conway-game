@@ -34,7 +34,7 @@ function checkSurvivals(liveCells, deadCells, killCells, playersColors, posX, po
   if (countNeighbors < 2 || countNeighbors > 3) killCells.add(`${posX},${posY}`);
 }
 
-function runRound(liveCells, playersColors) {
+function runRound(liveCells, playersColors, maxCol, maxRow) {
   const deadCells = new Map();
   const killCells = new Set();
   for (const [, cell] of liveCells) {
@@ -44,7 +44,7 @@ function runRound(liveCells, playersColors) {
   // Check which dead cells should be alive
   for (const [key, info] of deadCells) {
     const [x, y, count, colorsArray] = info;
-    if (count === 3 && x >= 0 && y >= 0) {
+    if (count === 3 && x >= 0 && y >= 0 && x < maxCol && y < maxRow) {
       // Mix colors of the neighbor cells (the saviors)
       const mixColor = colorsArray
         .reduce((acc, color, index) => {
