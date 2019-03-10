@@ -73,6 +73,10 @@ import * as models from './models';
 export default {
   name: 'RoomHeader',
 
+  props: {
+    world: { type: Object, required: true },
+  },
+
   data() {
     return {
       color: '#ff4500',
@@ -82,10 +86,18 @@ export default {
     };
   },
 
+  watch: {
+    world() {
+      if (this.world.setColor) this.world.setColor(this.color);
+    },
+  },
+
   methods: {
     // Change color on picker's color change
     handleColorChange(color) {
       this.color = color;
+      this.world.setColor(color);
+
       this.$emit('colorChange', color);
     },
   },

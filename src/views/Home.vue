@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <RoomHeader @colorChange="handleColorChange" />
+    <RoomHeader :world="world" />
 
     <div id="worldContainer" class="canvas-container">
       <canvas id="world" />
@@ -19,20 +19,20 @@ export default {
     RoomHeader,
   },
 
+  data() {
+    return {
+      // This win't be passwed to other components after we have the Vuex store set up
+      world: {},
+    };
+  },
+
   mounted() {
     this.world = new World(50, 50);
     this.world.create();
-    this.world.setColor('blue');
   },
 
   destroyed() {
     this.world.destruct();
-  },
-
-  methods: {
-    handleColorChange(color) {
-      this.world.setColor(color);
-    },
   },
 };
 </script>
