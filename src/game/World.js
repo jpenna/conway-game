@@ -64,7 +64,6 @@ export default class World {
 
   // Resize canvas on window resize
   resizeCanvas() {
-    console.log('resize')
     const containerWidth = this.worldContainer.offsetWidth;
     this.canvasWidth = containerWidth;
     this.canvasHeight = containerWidth;
@@ -159,7 +158,7 @@ export default class World {
   handleClick() {
     const key = `${this.hoverCol},${this.hoverRow}`;
 
-    if (this.liveCells.has(key) && this.liveCells.get(key)[2] === 'me') return;
+    if (this.liveCells.has(key) && this.liveCells.get(key)[2] !== 'me') return;
 
     // Remove if has cell and is not move spawning
     if (this.liveCells.has(key) && this.spawnMove !== true) {

@@ -3,7 +3,7 @@ import Color from 'color';
 // --------------- Utils ---------------
 function debounce(method) {
   clearTimeout(this.debounceTimeout);
-  this.debounceTimeout = setTimeout(method, 200);
+  this.debounceTimeout = setTimeout(method, 100);
 }
 
 function getMousePosition(event, maxWidth, maxHeight) {
