@@ -1,5 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import Color from 'color';
+
 // --------------- Utils ---------------
 function debounce(method) {
   clearTimeout(this.debounceTimeout);
@@ -34,7 +35,6 @@ function checkSurvivals(liveCells, deadCells, killCells, playersColors, posX, po
       }
     }
   }
-
   // Should die (under-population or overcrowded)
   if (countNeighbors < 2 || countNeighbors > 3) killCells.add(`${posX},${posY}`);
 }

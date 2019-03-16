@@ -10,7 +10,9 @@ This is an implementation of Conway's Game of Life.
 > I plan to do it on my free time 🕺
 
 ```diff
-- Tests are broken!
+- The tests in `helper` are shown as broken but are not in fact broken (so I `skipped` them).
+- There is a weird behavior that don't return the value set in the function
+- (but it works if you are using `--watch` and save the `.test` file)
 ```
 
 ## 🍹 Live demo
@@ -39,6 +41,13 @@ The decision for Vue.js is simply because I am currently developing with it in m
 This was the first time I worked with `<canvas>`.  
 I decided to use it because it has better performance to handle this dynamics.  
 It also allows for interesting features: zooming, navigation...
+
+I didn't use a 2D array to create the matrix of the cells,
+instead I used a mix of `Set` and `Map` to read only the live cells and its neighboring cells.
+This way the application don't have to iterate through the whole array and check all neighboring cells.
+With no optimization, on a 50x50 matrix, this would mean 50x50x8 = 20,000 iterations (8 neighboring cells),
+but with my current solution this max iterations will only happen if ALL cells are alive at once,
+(what can only happen at the first round of the game).
 
 ## Backend Server (Node.js)
 
