@@ -1,6 +1,11 @@
 /* eslint-disable no-nested-ternary */
 import Color from 'color';
 // --------------- Utils ---------------
+function debounce(method) {
+  clearTimeout(this.debounceTimeout);
+  this.debounceTimeout = setTimeout(method, 200);
+}
+
 function getMousePosition(event, maxWidth, maxHeight) {
   const { offsetX, offsetY } = event;
 
@@ -66,4 +71,5 @@ function runRound(liveCells, playersColors, maxCol, maxRow) {
 export default {
   getMousePosition,
   runRound,
+  debounce,
 };

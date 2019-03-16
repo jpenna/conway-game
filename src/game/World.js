@@ -17,12 +17,13 @@ export default class World {
 
     this.spawnMove = null;
 
-    window.addEventListener('resize', this.resizeCanvas);
+    this.onResize = helpers.debounce.bind(this, this.resizeCanvas.bind(this));
+    window.addEventListener('resize', this.onResize);
   }
 
   // Cleanup class listener
   destruct() {
-    window.removeEventListener('resize', this.resizeCanvas);
+    window.removeEventListener('resize', this.onResize);
   }
 
   // --------------- Properties ---------------
@@ -37,9 +38,7 @@ export default class World {
     this.running = true;
     helpers.runRound(this.liveCells, this.playersColors, this.colNumber, this.rowNumber);
     this.renderWorld();
-    this.startTimeout = setTimeout(() => {
-      this.start();
-    }, this.tick);
+    this.startTimeout = setTimeout(this.start, this.tick);
   }
 
   stop() {
@@ -65,6 +64,7 @@ export default class World {
 
   // Resize canvas on window resize
   resizeCanvas() {
+    console.log('resize')
     const containerWidth = this.worldContainer.offsetWidth;
     this.canvasWidth = containerWidth;
     this.canvasHeight = containerWidth;
@@ -73,6 +73,7 @@ export default class World {
     this.canvas.height = this.canvasHeight;
 
     this.cellSize = this.canvasWidth / this.colNumber;
+    this.renderWorld();
   }
 
   // Draw cell horizontal and vertical borders
