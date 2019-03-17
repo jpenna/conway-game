@@ -6,20 +6,12 @@ socket.send = function send(data) {
   sendOriginal.call(this, JSON.stringify(data));
 };
 
-let store;
-
 socket.addEventListener('open', () => {
-  store.dispatch('game/connect');
-});
-
-// Listen for messages
-socket.addEventListener('message', (event) => {
-  const { type, payload } = event.data;
-  console.info('Message from server ', type, payload);
+  socket.store.dispatch('initConnection');
 });
 
 export function setStore(instanceStore) {
-  store = instanceStore;
+  socket.store = instanceStore;
 }
 
 export default socket;

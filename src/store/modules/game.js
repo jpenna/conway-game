@@ -5,7 +5,7 @@ const initialState = {
 };
 
 const actions = {
-  async connect({ commit }) {
+  initConnection({ commit }) {
     commit(types.CONNECTED);
   },
 };
@@ -18,7 +18,6 @@ const mutations = {
 };
 
 export default {
-  namespaced: true,
   state: initialState,
   mutations,
   actions,
