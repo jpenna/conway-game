@@ -28,7 +28,7 @@ export default class World {
       // TODO use ID of player and get color from players list
       const map = update.reduce((acc, [key, info]) => {
         const [x, y] = key.split(',');
-        acc.push([key, [x, y, info.color]]);
+        acc.push([key, [+x, +y, info.color]]);
         return acc;
       }, []);
       this.liveCells = new Map(map);
@@ -164,6 +164,7 @@ export default class World {
   }
 
   handleMouseMove(event) {
+    if (this.isRunning) return;
     const [mouseX, mouseY] = helpers.getMousePosition(event, this.canvasWidth, this.canvasHeight);
 
     const posX = Math.floor(mouseX / this.cellSize);
@@ -178,6 +179,7 @@ export default class World {
   }
 
   handleClick() {
+    if (this.isRunning) return;
     const key = `${this.hoverCol},${this.hoverRow}`;
 
     if (this.liveCells.has(key) && this.liveCells.get(key)[2] !== 'me') return;

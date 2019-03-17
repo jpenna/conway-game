@@ -213,6 +213,8 @@ describe('World', () => {
         world.handleMouseMove({});
         sinon.assert.calledTwice(world.renderWorld);
       });
+
+      it('Should skip if game is running');
     });
 
     describe('On moving', () => {
@@ -305,6 +307,7 @@ describe('World', () => {
       });
 
       it('Send change to server');
+      it('Should skip if game is running');
     });
   });
 });

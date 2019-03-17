@@ -11,6 +11,7 @@
           <span class="d-inline-block mr-10">Your color:</span>
           <el-color-picker
             :value="myself.color"
+            :disabled="world.isRunning"
             size="mini"
             class="align-middle"
             :predefine="predefinedColors"
@@ -19,8 +20,8 @@
         </div>
       </div>
 
-      <h2 class="mt-0 mb-0">
-        {{ world.isRunning ? 'Running' : 'Stopped' }}
+      <h2 class="mt-0 mb-0" :class="`text-${world.isRunning ? 'success' : 'danger'}`">
+        Game {{ world.isRunning ? 'Running' : 'Stopped' }}
       </h2>
 
       <!-- Right -->
