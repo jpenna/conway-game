@@ -11,8 +11,8 @@ export function normalizePlayer(player) {
 
 const initialState = {
   items: {},
-  loading: false,
-  me: {},
+  loadingPlayers: false,
+  myself: {},
 };
 
 const actions = {
@@ -20,17 +20,28 @@ const actions = {
     commit(types.SET_MYSELF, { color });
     api.init({ color });
   },
+
+  changeColor({ commit, state }, color) {
+    const { id } = state.myself;
+    commit(types.SET_COLOR, color);
+    api.changeColor({ id, color });
+  },
 };
 
 const mutations = {
   [types.SET_MYSELF](state, myself) {
-    state.loading = true;
-    state.me = myself;
+    state.loadingPlayers = true;
+    const { id, color } = myself;
+    state.myself = { id, color };
   },
 
   [types.SET_PLAYERS](state, players) {
-    state.loading = true;
+    state.loadingPlayers = true;
     state.players = players.map(normalizePlayer);
+  },
+
+  [types.SET_COLOR](state, color) {
+    state.myself.color = color;
   },
 };
 

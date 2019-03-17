@@ -10,7 +10,7 @@
         <div class="mt-10">
           <span class="d-inline-block mr-10">Your color:</span>
           <el-color-picker
-            value="color"
+            :value="myself.color"
             size="mini"
             class="align-middle"
             :predefine="predefinedColors"
@@ -52,6 +52,8 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
+
 import * as models from './models';
 
 import Players from '@/components/Players.vue';
@@ -70,24 +72,29 @@ export default {
 
   data() {
     return {
-      color: '#ff4500',
       predefinedColors: models.predefinedColors,
     };
   },
 
+  computed: {
+    ...mapState({ myself: state => state.players.myself }),
+  },
+
   watch: {
     world() {
-      if (this.world.setColor) this.world.setColor(this.color);
+      if (this.world.setColor) this.world.setColor(this.myself.color);
     },
   },
 
   methods: {
+    ...mapActions({ changeColor: 'changeColor' }),
+
     // Change color on picker's color change
     handleColorChange(color) {
       this.color = color;
       this.world.setColor(color);
 
-      this.$emit('colorChange', color);
+      this.changeColor(color);
     },
 
     handleRunning() {

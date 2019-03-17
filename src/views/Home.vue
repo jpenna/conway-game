@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
+
 import RoomHeader from '@/components/RoomHeader.vue';
 import World from '@/game/World';
 
@@ -31,9 +33,14 @@ export default {
     };
   },
 
+  computed: {
+    ...mapState({ myself: state => state.players.myself }),
+  },
+
   mounted() {
     this.world = new World(50, 50);
     this.world.create();
+    this.setMyself({ color: '#ff4500' });
   },
 
   destroyed() {
@@ -41,6 +48,8 @@ export default {
   },
 
   methods: {
+    ...mapActions({ setMyself: 'setMyself' }),
+
     toggleRunning() {
       this.isRunning = !this.isRunning;
       if (this.isRunning) this.world.start();
