@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",
-    "test": "vue-cli-service test:unit"
+    "test": "vue-cli-service test:unit -- --recursive \"./tests/unit/**/*.spec.js\" --file ./src/tests/unit/stub/Websocket.js"
   },
   "dependencies": {
     "color": "^3.1.0",
