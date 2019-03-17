@@ -1,4 +1,4 @@
-describe.skip('API: players', () => {
+describe('API: players', () => {
   it('init: send `init` socket message with player\'s data');
   it('changeColor: send WS message to update player\'s color');
 

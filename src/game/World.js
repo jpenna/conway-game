@@ -1,5 +1,7 @@
 import styleVars from '@/styles/_variables.scss';
 import Color from 'color';
+import * as api from '@/api/world';
+import globalEvent from '../utils/globalEvents';
 
 import helpers from './helpers';
 
@@ -8,6 +10,7 @@ export default class World {
     this.rowNumber = rowNumber;
     this.colNumber = colNumber;
     this.tick = tick;
+    this.isRunning = false;
 
     this.playersColors = {};
     this.liveCells = new Map();
@@ -19,6 +22,23 @@ export default class World {
 
     this.onResize = helpers.debounce.bind(this, this.resizeCanvas.bind(this));
     window.addEventListener('resize', this.onResize);
+
+    globalEvent.on('world:update', (update) => {
+      // TODO use ID of player and get color from players list
+      const map = update.reduce((acc, [key, info]) => {
+        const [x, y] = key.split(',');
+        acc.push([key, [x, y, info.color]]);
+        return acc;
+      }, []);
+      this.liveCells = new Map(map);
+      this.renderWorld();
+    });
+    globalEvent.on('game:start', () => {
+      this.start();
+    });
+    globalEvent.on('game:stop', () => {
+      this.stop();
+    });
   }
 
   // Cleanup class listener
@@ -35,14 +55,14 @@ export default class World {
 
   // --------------- Run ---------------
   start() {
-    this.running = true;
+    this.isRunning = true;
     helpers.runRound(this.liveCells, this.playersColors, this.colNumber, this.rowNumber);
     this.renderWorld();
     this.startTimeout = setTimeout(() => this.start(), this.tick);
   }
 
   stop() {
-    this.running = false;
+    this.isRunning = false;
     clearTimeout(this.startTimeout);
   }
 
@@ -169,5 +189,8 @@ export default class World {
       this.liveCells.set(key, [this.hoverCol, this.hoverRow, 'me']);
       this.renderWorld();
     }
+    // TODO render world only once for players change, not now and on server update
+    // TODO send multiple at once instead of one by one
+    api.updateWorld([{ key }]);
   }
 }

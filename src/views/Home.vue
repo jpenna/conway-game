@@ -2,7 +2,7 @@
   <div class="home">
     <RoomHeader
       :world="world"
-      :is-running="isRunning"
+      :is-running="world.isRunning"
       @toggleRunning="toggleRunning"
     />
 
@@ -14,6 +14,8 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+
+import worldApi from '@/api/world';
 
 import RoomHeader from '@/components/RoomHeader.vue';
 import World from '@/game/World';
@@ -29,7 +31,6 @@ export default {
     return {
       // This win't be passwed to other components after we have the Vuex store set up
       world: {},
-      isRunning: false,
     };
   },
 
@@ -51,9 +52,8 @@ export default {
     ...mapActions({ setMyself: 'setMyself' }),
 
     toggleRunning() {
-      this.isRunning = !this.isRunning;
-      if (this.isRunning) this.world.start();
-      else this.world.stop();
+      if (this.world.isRunning) worldApi.signalStart();
+      else worldApi.signalStop();
     },
   },
 };

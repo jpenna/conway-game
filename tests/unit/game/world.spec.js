@@ -65,6 +65,11 @@ describe('World', () => {
     it('Set correct cell size', () => {
       expect(world.cellSize).to.equal(2);
     });
+
+    it('Listens to `world:update`: update live cells');
+    it('Listens to `world:update`: re-render world');
+    it('Listens to `game:start`: start game');
+    it('Listens to `game:stop`: stop game');
   });
 
   describe('Resize', () => {
@@ -248,21 +253,10 @@ describe('World', () => {
     });
 
     describe('On Click', () => {
-      // it('Add `me` cell to Initial World if not alive', () => {
-      //   world.handleClick();
-      //   expect(world.initialWorld[world.hoverCol][world.hoverRow]).to.equal('me');
-      // });
-
       it('Set position of `me` live cell in live cells', () => {
         world.handleClick();
         expect(world.liveCells.has(`${world.hoverCol},${world.hoverRow}`)).to.be.true;
       });
-
-      // it('Remove `me` cell from Initial World if alive', () => {
-      //   world.handleClick();
-      //   world.handleClick();
-      //   expect(world.initialWorld[world.hoverCol][world.hoverRow]).to.equal(null);
-      // });
 
       it('Remove `me` cell from live cells', () => {
         world.handleClick();
@@ -308,6 +302,8 @@ describe('World', () => {
         world.handleClick();
         sinon.assert.calledOnce(world.renderWorld);
       });
+
+      it('Send change to server');
     });
   });
 });

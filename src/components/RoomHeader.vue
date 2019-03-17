@@ -67,7 +67,7 @@ export default {
 
   props: {
     world: { type: Object, required: true },
-    isRunning: { type: Boolean, required: true },
+    isRunning: { type: Boolean, default: false },
   },
 
   data() {
@@ -78,6 +78,7 @@ export default {
 
   computed: {
     ...mapState({ myself: state => state.players.myself }),
+    // TODO if game if running, disable color change
   },
 
   watch: {
