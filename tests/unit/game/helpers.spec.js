@@ -10,7 +10,7 @@ describe('Helpers', () => {
     event = { offsetX: 300, offsetY: 400 };
   });
 
-  describe('getMousePosition', () => {
+  describe.skip('getMousePosition', () => {
     it('Calculates the mouse position correctly', () => {
       const res = helpers.getMousePosition(event, maxHeight, maxWidth);
       expect(res).to.deep.equal([event.offsetX, event.offsetY]);
