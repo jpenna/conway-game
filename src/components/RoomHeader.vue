@@ -28,7 +28,7 @@
             <i class="el-icon-arrow-down el-icon--right" />
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>Pattern spdfoijaweopifjw 1</el-dropdown-item>
+            <el-dropdown-item>Pattern 1</el-dropdown-item>
             <el-dropdown-item>Pattern 2</el-dropdown-item>
             <el-dropdown-item>Pattern 3</el-dropdown-item>
           </el-dropdown-menu>

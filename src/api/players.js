@@ -5,8 +5,8 @@ export function init(player) {
   socket.send({ type: 'init', payload: player });
 }
 
-export function changeColor(id, color) {
-  socket.send({ type: 'player:update', payload: { id, color } });
+export function changeColor({ id, color }) {
+  socket.send({ type: 'player:update', payload: { id, update: { color } } });
 }
 
 socket.addEventListener('message', (event) => {
