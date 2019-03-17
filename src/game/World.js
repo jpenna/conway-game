@@ -11,6 +11,7 @@ export default class World {
     this.colNumber = colNumber;
     this.tick = tick;
     this.isRunning = false;
+    this.round = 0;
 
     this.playersColors = {};
     this.liveCells = new Map();
@@ -56,6 +57,7 @@ export default class World {
   // --------------- Run ---------------
   start() {
     this.isRunning = true;
+    this.round += 1;
     helpers.runRound(this.liveCells, this.playersColors, this.colNumber, this.rowNumber);
     this.renderWorld();
     this.startTimeout = setTimeout(() => this.start(), this.tick);

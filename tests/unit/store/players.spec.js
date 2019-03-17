@@ -15,6 +15,7 @@ describe('Store: players', () => {
 
     it('SET_PLAYERS: should set loading = false');
     it('SET_PLAYERS: should set players list');
+    it('SET_PLAYERS: update self with player from list');
 
     it('SET_COLOR: updates player color');
   });

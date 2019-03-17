@@ -3,8 +3,8 @@
     <div class="flex-split">
       <!-- Left -->
       <div>
-        <!-- Duration -->
-        <div>Duration</div>
+        <!-- Round -->
+        <div>Round: {{ world.round }}</div>
 
         <!-- Color -->
         <div class="mt-10">
@@ -18,6 +18,10 @@
           />
         </div>
       </div>
+
+      <h2 class="mt-0 mb-0">
+        {{ world.isRunning ? 'Running' : 'Stopped' }}
+      </h2>
 
       <!-- Right -->
       <div>
@@ -38,11 +42,11 @@
         <el-popover trigger="hover">
           <el-button
             slot="reference"
-            :type="isRunning ? 'danger' : 'success'"
+            :type="myself.status === 'ready' ? 'danger' : 'success'"
             plain
             @click="handleRunning"
           >
-            {{ isRunning ? 'Stop' : 'Start' }}
+            {{ myself.status === 'ready' ? 'Stop' : 'Start' }}
           </el-button>
           <Players />
         </el-popover>

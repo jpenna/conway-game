@@ -38,6 +38,8 @@ const mutations = {
   [types.SET_PLAYERS](state, players) {
     state.loading = false;
     state.items = players.map(normalizePlayer);
+    const myself = state.items.find(i => i.id === state.myself.id);
+    state.myself = { ...myself };
   },
 
   [types.SET_COLOR](state, color) {

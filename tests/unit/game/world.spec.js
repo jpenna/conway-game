@@ -39,6 +39,7 @@ describe('World', () => {
       it('Run one round');
       it('Re-render world');
       it('Schedule next run');
+      it('Should increment round count');
     });
     describe('On Stop', () => {
       it('Flag `not-running`');

@@ -26,7 +26,8 @@ import { PLAYER_STATUS_MAP } from '@/utils/consts';
 
 const labelType = {
   pending: 'warning',
-  ready: 'ready',
+  ready: 'success',
+  stop: 'danger',
 };
 
 export default {

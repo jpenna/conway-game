@@ -15,7 +15,7 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 
-import worldApi from '@/api/world';
+import * as gameApi from '@/api/game';
 
 import RoomHeader from '@/components/RoomHeader.vue';
 import World from '@/game/World';
@@ -52,8 +52,9 @@ export default {
     ...mapActions({ setMyself: 'setMyself' }),
 
     toggleRunning() {
-      if (this.world.isRunning) worldApi.signalStart();
-      else worldApi.signalStop();
+      // TODO use dict for player status
+      if (this.myself.status !== 'ready') gameApi.signalStart();
+      else gameApi.signalStop();
     },
   },
 };
