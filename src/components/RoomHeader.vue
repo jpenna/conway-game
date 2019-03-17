@@ -72,8 +72,6 @@ export default {
     return {
       color: '#ff4500',
       predefinedColors: models.predefinedColors,
-
-      players: models.players,
     };
   },
 

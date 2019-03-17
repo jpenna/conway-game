@@ -20,8 +20,16 @@
 </template>
 
 <script>
+import * as models from './models';
+
 export default {
   name: 'Players',
+
+  data() {
+    return {
+      players: models.players,
+    };
+  },
 };
 </script>
 

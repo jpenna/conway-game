@@ -6,9 +6,13 @@ import locale from 'element-ui/lib/locale/lang/en';
 import store from '@/store';
 import '@/registerServiceWorker';
 
+import * as api from '@/api';
+
 import '@/styles/index.scss';
 
 Vue.config.productionTip = false;
+
+api.setStore(store);
 
 Vue.use(ElementUI, { locale });
 
