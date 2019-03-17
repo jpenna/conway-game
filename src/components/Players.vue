@@ -1,9 +1,8 @@
 <template>
-  <div>
+  <div v-loading="loadingPlayers">
     <div
       v-for="player in players"
       :key="player.id"
-      v-loading="loadingPlayers"
       class="flex-split mb-10"
     >
       <div>
