@@ -4,6 +4,7 @@
       :world="world"
       :is-running="world.isRunning"
       @toggleRunning="toggleRunning"
+      @clearWorld="clearWorld"
     />
 
     <div id="worldContainer" class="canvas-container">
@@ -55,6 +56,10 @@ export default {
       // TODO use dict for player status
       if (this.myself.status !== 'ready') gameApi.signalStart();
       else gameApi.signalStop();
+    },
+
+    clearWorld() {
+      gameApi.signalClear();
     },
   },
 };

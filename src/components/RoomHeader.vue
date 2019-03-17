@@ -26,6 +26,14 @@
 
       <!-- Right -->
       <div>
+        <el-button
+          :disabled="this.myself.status === 'ready'"
+          type="warning"
+          @click="clearWorld"
+        >
+          Reset
+        </el-button>
+
         <!-- Patterns -->
         <el-dropdown>
           <el-button type="primary" plain>
@@ -105,6 +113,19 @@ export default {
 
     handleRunning() {
       this.$emit('toggleRunning');
+    },
+
+    clearWorld() {
+      this.$confirm('Clearing game will reset EVERYTHING. Proceed?', 'Confirmation', {
+        confirmButtonText: 'Clear',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+      }).then(() => {
+        this.$emit('clearWorld');
+      }).catch((error) => {
+        if (error === 'cancel') return;
+        console.error(error);
+      });
     },
   },
 };

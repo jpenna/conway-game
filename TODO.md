@@ -13,23 +13,23 @@
 
 ### v0.1.1
 
-- [ ] Fix tests
-- [ ] Create tests for the latest implemented features
+- [x] Fix tests
+- [x] Create tests for the latest implemented features
 
 ### v0.2
 
 - [ ] Add duration count
-- [ ] Add round count
+- [x] Add round count
 - [ ] Fix position of header
 - [ ] Add patterns
 - [ ] Patterns can be positioned by the client
-- [ ] Add `Reset` button
+- [x] Add `Reset` button
 
 ### v0.3 - Add server integration
 
-- [ ] Connect to the server
-- [ ] Receive players information
-- [ ] Send information about user
+- [x] Connect to the server
+- [x] Receive players information
+- [x] Send information about user
 - [ ] Add clear own cells (before running)
 - [ ] Allow user to set its own name
 

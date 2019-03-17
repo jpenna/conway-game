@@ -4,7 +4,7 @@ This is an implementation of Conway's Game of Life.
 
 > This is still a draft. 
 > 
-> Many features are still to be developed, like: creation of rooms, adding multiplayer support, resize of world grid...  
+> Many features are still to be developed, like: creation of rooms, handling new players in the middle of a session...  
 > Check the [TODO.md](./TODO.md) for a the tasks planning.
 >
 > I plan to do it on my free time 🕺
@@ -31,9 +31,6 @@ or wait for random people to join from the list (**v0.1 - not done yet**).
 The players can select its own colors and flag `READY` to start the game.
 The game only start after all players say they are ready.
 
-**The World is still open for changes!**  
-Any player can change its color and add more cells in the World.
-
 ## Frontend (Vue.js)
 
 The decision for Vue.js is simply because I am currently developing with it in my work.
@@ -48,23 +45,6 @@ This way the application don't have to iterate through the whole array and check
 With no optimization, on a 50x50 matrix, this would mean 50x50x8 = 20,000 iterations (8 neighboring cells),
 but with my current solution this max iterations will only happen if ALL cells are alive at once,
 (what can only happen at the first round of the game).
-
-## Backend Server (Node.js)
-
-> In this version there is no backend server.
-
-The backend job will be to synchronize the players inside the room and new players.
-
-To do this, the communication between client and server will be done using WebSocket
-([ws](https://www.npmjs.com/package/ws), [socket.io](https://www.npmjs.com/package/socket.io), etc... Not yet decided).
-To configure the room and include new players while the game is not started is straight forward:
-just send to the server, validate, store (in memory, no database for this application) and synchronize the state.
-After the game is running involves more attention.
-
-After a certain amount of rounds, a snapshot of the current state will be sent to the server and checked between the clients.  
-On inconsistance, the server will update the clients with the majority's state.  
-The server will store this snapshot, so any other player requesting for this information
-will be able to recompute the current state based on this snapshot.
 
 ## Project setup
 ```
