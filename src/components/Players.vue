@@ -1,14 +1,15 @@
 <template>
   <div>
     <div
-      v-for="(player, index) in players"
+      v-for="player in players"
       :key="player.id"
       v-loading="loadingPlayers"
       class="flex-split mb-10"
     >
       <div>
         <span class="mr-10 players-avatar" :style="{ backgroundColor: player.color }" />
-        <span>Player {{ index + 1 }}</span>
+        <!-- <span>Player {{ index + 1 }}</span> -->
+        <span>{{ player.id.split('-')[0] }}</span>
       </div>
       <el-tag
         size="mini"
