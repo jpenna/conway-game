@@ -3,6 +3,7 @@
     <div
       v-for="(player, index) in players"
       :key="player.id"
+      v-loading="loadingPlayers"
       class="flex-split mb-10"
     >
       <div>
@@ -11,24 +12,38 @@
       </div>
       <el-tag
         size="mini"
-        :type="player.labelType"
+        :type="labelType[player.status]"
       >
-        {{ player.status }}
+        {{ PLAYER_STATUS_MAP.get(player.status) }}
       </el-tag>
     </div>
   </div>
 </template>
 
 <script>
-import * as models from './models';
+import { mapState } from 'vuex';
+import { PLAYER_STATUS_MAP } from '@/utils/consts';
+
+const labelType = {
+  pending: 'warning',
+  ready: 'ready',
+};
 
 export default {
   name: 'Players',
 
   data() {
     return {
-      players: models.players,
+      labelType,
+      PLAYER_STATUS_MAP,
     };
+  },
+
+  computed: {
+    ...mapState({
+      players: state => state.players.items,
+      loadingPlayers: state => state.players.loading,
+    }),
   },
 };
 </script>

@@ -11,7 +11,7 @@ export function normalizePlayer(player) {
 
 const initialState = {
   items: {},
-  loadingPlayers: false,
+  loading: false,
   myself: {},
 };
 
@@ -30,14 +30,14 @@ const actions = {
 
 const mutations = {
   [types.SET_MYSELF](state, myself) {
-    state.loadingPlayers = true;
+    state.loading = true;
     const { id, color } = myself;
     state.myself = { id, color };
   },
 
   [types.SET_PLAYERS](state, players) {
-    state.loadingPlayers = true;
-    state.players = players.map(normalizePlayer);
+    state.loading = false;
+    state.items = players.map(normalizePlayer);
   },
 
   [types.SET_COLOR](state, color) {
