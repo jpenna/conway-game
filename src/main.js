@@ -4,7 +4,7 @@ import App from '@/App.vue';
 import router from '@/router';
 import locale from 'element-ui/lib/locale/lang/en';
 import store from '@/store';
-import '@/registerServiceWorker';
+// import '@/registerServiceWorker';
 
 import * as api from '@/api';
 
