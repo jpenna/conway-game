@@ -2,9 +2,8 @@
 
 This is an implementation of Conway's Game of Life.
 
-> This is still a draft. 
-> 
-> Many features are still to be developed, like: creation of rooms, handling new players in the middle of a session...  
+> Many features are still to be developed, like: creation of rooms, handling new players in the middle of a session,
+> allowing world mutation when the game is stopped, tracking player's colors when editing the world...  
 > Check the [TODO.md](./TODO.md) for a the tasks planning.
 >
 > I plan to do it on my free time 🕺
@@ -80,6 +79,11 @@ npm run test:e2e
 ```
 npm run test
 ```
+
+### Known issues
+
+- [ ] When selecting cells, they disappear until the server accepts the creation
+- [ ] Cell's colors do not change according to changes in the picked color
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
