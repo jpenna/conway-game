@@ -46,7 +46,7 @@ export default {
   mounted() {
     this.world = new World(50, 50);
     this.world.create();
-    this.setMyself({ color: '#ff4500' });
+    this.setMyself({ color: '#FF4500' });
   },
 
   destroyed() {

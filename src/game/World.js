@@ -170,6 +170,7 @@ export default class World {
 
   // --------------- Interaction ---------------
   handleMovingSelection(event) {
+    // spawnMove neutral state is null, used to know where the move started (revive or kill)
     if (event.buttons === 1 && this.spawnMove === null) {
       const key = `${this.hoverCol},${this.hoverRow}`;
       this.spawnMove = !this.liveCells.has(key);
@@ -200,19 +201,22 @@ export default class World {
     if (this.round) return;
     const key = `${this.hoverCol},${this.hoverRow}`;
 
-    if (this.liveCells.has(key) && this.liveCells.get(key)[2] !== 'me') return;
+    const hasCell = this.liveCells.has(key);
+
+    if (hasCell && this.liveCells.get(key)[2] !== this.playersColors.me) return;
 
     // Remove if has cell and is not move spawning
-    if (this.liveCells.has(key) && this.spawnMove !== true) {
+    if (hasCell && this.spawnMove !== true) {
       this.liveCells.delete(key);
+      // TODO render world only once for players change, not now and on server update
+      // TODO send multiple at once instead of one by one
+      api.updateWorld([{ key }]);
       this.renderWorld();
-    // Add if is not move killing
-    } else if (this.spawnMove !== false) {
-      this.liveCells.set(key, [this.hoverCol, this.hoverRow, 'me']);
+    // If is not move killing, add cell
+    } else if (!hasCell && this.spawnMove !== false) {
+      this.liveCells.set(key, [this.hoverCol, this.hoverRow, this.playersColors.me]);
+      api.updateWorld([{ key }]);
       this.renderWorld();
     }
-    // TODO render world only once for players change, not now and on server update
-    // TODO send multiple at once instead of one by one
-    api.updateWorld([{ key }]);
   }
 }

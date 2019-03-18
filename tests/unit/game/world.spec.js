@@ -316,6 +316,7 @@ describe('World', () => {
       });
 
       it('Send change to server');
+      it('If there was no change, don\'t trigger server change');
       it('Should skip if game is running');
     });
   });

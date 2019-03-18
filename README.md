@@ -84,6 +84,7 @@ npm run test
 
 - [ ] When selecting cells, they disappear until the server accepts the creation
 - [ ] Cell's colors do not change according to changes in the picked color
+- [ ] After changing color, player can't delete previous cells
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
