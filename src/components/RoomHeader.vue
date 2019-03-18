@@ -1,14 +1,17 @@
 <template>
-  <div>
+  <div class="room-header">
     <div class="flex-split">
       <!-- Left -->
       <div>
         <!-- Round -->
-        <div>Round: {{ world.round }}</div>
+        <div class="text-left">
+          <span class="text-bold text-disabled ">Duration:</span>
+          {{ Math.floor(world.duration / 1000) }} seconds
+        </div>
 
         <!-- Color -->
-        <div class="mt-10">
-          <span class="d-inline-block mr-10">Your color:</span>
+        <div class="mt-10 text-left">
+          <span class="d-inline-block mr-10 text-bold text-disabled">Your color:</span>
           <el-color-picker
             :value="myself.color"
             :disabled="world.isRunning"
@@ -20,23 +23,29 @@
         </div>
       </div>
 
-      <h2 class="mt-0 mb-0" :class="`text-${world.isRunning ? 'success' : 'danger'}`">
-        Game {{ world.isRunning ? 'Running' : 'Stopped' }}
-      </h2>
+      <div>
+        <h2 class="mt-0 mb-0" :class="`text-${world.isRunning ? 'success' : 'danger'}`">
+          Game {{ world.isRunning ? 'Running' : 'Stopped' }}
+        </h2>
+        <h3 class="text-disabled mt-0 mb-0">Round: {{ world.round }}</h3>
+      </div>
 
       <!-- Right -->
       <div>
         <el-button
           :disabled="this.myself.status === 'ready'"
           type="warning"
+          class="mr-10"
+          size="small"
+          round
           @click="clearWorld"
         >
           Reset
         </el-button>
 
         <!-- Patterns -->
-        <el-dropdown>
-          <el-button type="primary" plain>
+        <el-dropdown class="mr-10">
+          <el-button type="primary" plain round size="small">
             Patterns
             <i class="el-icon-arrow-down el-icon--right" />
           </el-button>
@@ -53,6 +62,8 @@
             slot="reference"
             :type="myself.status === 'ready' ? 'danger' : 'success'"
             plain
+            round
+            size="small"
             @click="handleRunning"
           >
             {{ myself.status === 'ready' ? 'Stop' : 'Start' }}
@@ -130,3 +141,11 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.room-header {
+  max-width: 900px;
+  margin: auto;
+  margin-top: 30px;
+}
+</style>

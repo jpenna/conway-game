@@ -60,6 +60,7 @@ export default {
 
     clearWorld() {
       gameApi.signalClear();
+      this.world.clear();
     },
   },
 };

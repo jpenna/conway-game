@@ -35,11 +35,12 @@ describe('World', () => {
 
   describe('Run', () => {
     describe('On Start', () => {
+      it('Should start running after first timeout');
       it('Flag `running`');
-      it('Run one round');
       it('Re-render world');
       it('Schedule next run');
       it('Should increment round count');
+      it('Should increment duration with tick duration');
     });
     describe('On Stop', () => {
       it('Flag `not-running`');
