@@ -118,3 +118,10 @@ $width: 25 50 75 100;
   align-items: center;
   flex-wrap: wrap;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+.cursor-disabled {
+  cursor: not-allowed;
+}

@@ -180,7 +180,8 @@ export default class World {
   }
 
   handleMouseMove(event) {
-    if (this.isRunning) return;
+    // TODO Update server with world state, so it won't erase everything on player exit
+    if (this.round) return;
     const [mouseX, mouseY] = helpers.getMousePosition(event, this.canvasWidth, this.canvasHeight);
 
     const posX = Math.floor(mouseX / this.cellSize);
@@ -195,7 +196,8 @@ export default class World {
   }
 
   handleClick() {
-    if (this.isRunning) return;
+    // TODO Update server with world state, so it won't erase everything on player exit
+    if (this.round) return;
     const key = `${this.hoverCol},${this.hoverRow}`;
 
     if (this.liveCells.has(key) && this.liveCells.get(key)[2] !== 'me') return;

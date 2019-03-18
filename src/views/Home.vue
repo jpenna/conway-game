@@ -7,7 +7,11 @@
       @clearWorld="clearWorld"
     />
 
-    <div id="worldContainer" class="canvas-container">
+    <div
+      id="worldContainer"
+      class="canvas-container"
+      :class="world.round ? 'cursor-disabled' : 'cursor-pointer'"
+    >
       <canvas id="world" />
     </div>
   </div>
@@ -77,6 +81,5 @@ export default {
   margin: 2rem auto;
   max-width: 800px;
   text-align: center;
-  cursor: pointer;
 }
 </style>
