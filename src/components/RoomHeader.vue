@@ -6,7 +6,7 @@
         <!-- Round -->
         <div class="text-left">
           <span class="text-bold text-disabled ">Duration:</span>
-          {{ Math.floor(world.duration / 1000) }} seconds
+          {{ world.duration }} seconds
         </div>
 
         <!-- Color -->

@@ -35,16 +35,24 @@ describe('World', () => {
 
   describe('Run', () => {
     describe('On Start', () => {
-      it('Should start running after first timeout');
-      it('Flag `running`');
-      it('Re-render world');
-      it('Schedule next run');
+      it('Flags `running`');
+      it('Triggers duration counter');
+      it('Triggers run round');
+    });
+    describe('Run round', () => {
+      it('Should running after first timeout');
       it('Should increment round count');
-      it('Should increment duration with tick duration');
+      it('Auto-schedule next run');
+      it('Re-render world');
+    });
+    describe('Duration counter', () => {
+      it('Auto-schedule next run');
+      it('Should increment duration by 1 every second');
     });
     describe('On Stop', () => {
       it('Flag `not-running`');
-      it('Clear schedule for next run');
+      it('Clear scheduled for next run');
+      it('Clear scheduled duration timeout');
     });
   });
 

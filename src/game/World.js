@@ -58,18 +58,30 @@ export default class World {
   // --------------- Run ---------------
   start() {
     this.isRunning = true;
+    this.runRound();
+    this.triggerDuration();
+  }
+
+  runRound() {
     this.startTimeout = setTimeout(() => {
       this.round += 1;
-      this.duration += this.tick;
       helpers.runRound(this.liveCells, this.playersColors, this.colNumber, this.rowNumber);
       this.renderWorld();
-      this.start();
+      this.runRound();
     }, this.tick);
+  }
+
+  triggerDuration() {
+    this.durationTimeout = setTimeout(() => {
+      this.duration += 1;
+      this.triggerDuration();
+    }, 1000);
   }
 
   stop() {
     this.isRunning = false;
     clearTimeout(this.startTimeout);
+    clearTimeout(this.durationTimeout);
   }
 
   // --------------- Initial ---------------
