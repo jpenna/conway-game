@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === 'test') {
   };
 }
 
-const socket = new WebSocket(`ws://${process.env.VUE_APP_WS_URL}`);
+const socket = new WebSocket(process.env.VUE_APP_WS_URL);
 
 // Always send JSON
 const sendOriginal = socket.send;
