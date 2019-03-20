@@ -83,7 +83,8 @@ instead I used a mix of `Set` and `Map` to read only the live cells and its neig
 This way the application don't have to iterate through the whole array and check all neighboring cells.
 With no optimization, on a 50x50 matrix, this would mean 50x50x8 = 20,000 iterations (8 neighboring cells),
 but with my current solution this max iterations will only happen if ALL cells are alive at once,
-(what can only happen at the first round of the game).
+(what can only happen at the first round of the game). On  the other hand, there might be some performance issues
+when deciding for `Map` over `Array` (check Tradeoffs below).
 
 ### Tradeoffs
 
@@ -110,6 +111,15 @@ involved cells should re-render.
 There are also vulnerabilities warned on Github on dependencies used by my dependencies. I will try to fix it keeping
 my current dependencies, by starting an issue or changing updating the versions for the project only. 
 If not possible, I can change the used dependencies.
+
+Another issue that I left open is the use of `Map` to handle the world. Each `key` is a position string in the
+form `x,y`, and the values are the colors (which I am going to replace for the player's entity when players are editing the world).
+I am not sure about the performance of accessing `Map` values against `Array`, so I want to run a benchmark to validate this.
+To test the efficiency, I will try a 2D `Array` with the whole size of the map (50x50, for example),
+where a live cell holds a player entity and a dead cell is `null`, and an `Array` of `Array` holding the live cells positions (`[x, y`]).
+Then I would iterate over the "positions Array" to check only the live cells and in the end of the round, replace this "positions
+array" with a new `Array` containing the new values. This way I keep the idea of not checking the whole world all the time, and
+I have the better (?) access speed of `Array` for this case.
 
 ### Known issues
 
